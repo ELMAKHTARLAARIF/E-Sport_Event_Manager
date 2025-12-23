@@ -24,9 +24,11 @@ CREATE TABLE Joueur (
     FOREIGN KEY (equipe_id) REFERENCES Equipe(id) ON DELETE CASCADE
 );
 
-CREATE TABLE Tournoi (
+CREATE TABLE Tournoi (cat ~/.ssh/id_rsa.pub
     id INT AUTO_INCREMENT PRIMARY KEY,
-    titre VARCHAR(100) NOT NULL,
+    titre VARCHAR(100) NOT NULL,git remote set-url origin https://github.com/ELMAKHTARLAARIF/E-Sport_Event_Manager.git
+git push origin master
+
     cashprize DECIMAL(15,2),
     format VARCHAR(50),
     date_tournoi DATE
