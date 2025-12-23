@@ -24,17 +24,15 @@ CREATE TABLE Joueur (
     FOREIGN KEY (equipe_id) REFERENCES Equipe(id) ON DELETE CASCADE
 );
 
-CREATE TABLE Tournoi (cat ~/.ssh/id_rsa.pub
+CREATE TABLE Tournoi (
     id INT AUTO_INCREMENT PRIMARY KEY,
     titre VARCHAR(100) NOT NULL,
-git push origin master
-
     cashprize DECIMAL(15,2),
     format VARCHAR(50),
     date_tournoi DATE
 );
 
-CREATE TABLE `Match` (
+CREATE TABLE MatchEvent (
     id INT AUTO_INCREMENT PRIMARY KEY,
     score_a INT,
     score_b INT,
