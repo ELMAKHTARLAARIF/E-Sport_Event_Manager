@@ -26,7 +26,7 @@ CREATE TABLE Joueur (
 
 CREATE TABLE Tournoi (cat ~/.ssh/id_rsa.pub
     id INT AUTO_INCREMENT PRIMARY KEY,
-    titre VARCHAR(100) NOT NULL,git remote set-url origin https://github.com/ELMAKHTARLAARIF/E-Sport_Event_Manager.git
+    titre VARCHAR(100) NOT NULL,
 git push origin master
 
     cashprize DECIMAL(15,2),
