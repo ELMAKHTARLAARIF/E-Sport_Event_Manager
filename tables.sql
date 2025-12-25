@@ -27,7 +27,7 @@ CREATE TABLE Joueur (
 CREATE TABLE Tournoi (
     id INT AUTO_INCREMENT PRIMARY KEY,
     titre VARCHAR(100) NOT NULL,
-    cashprize DECIMAL(15,2),
+    cashprize DECIMAL(8,2),
     format VARCHAR(50),
     date_tournoi DATE
 );
