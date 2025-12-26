@@ -1,13 +1,10 @@
 <?php 
-class Team{
+require_once './getConnection.php';
+require_once "Model.php";
+class Team extends Model{
+    protected string $table ='Team';
     private string $name;
     private string $jeu;
-        private PDO $pdo;
-
-        public function __construct()
-    {
-        require_once 'getConnection.php';
-    }
 
     public function setName(string $name): void
     {
@@ -23,30 +20,21 @@ class Team{
         }
     }
 
-    public function createTeam(): void
+    public function create(): bool
     {
-        $sql = "INSERT INTO Equipe (nom, jeu) VALUES (?, ?)";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([$this->name, $this->jeu]);
-        if ($stmt) {
-            $console = new Console();
+        $stmt = $this->pdo->prepare(
+            "INSERT INTO Equipe (nom, jeu) VALUES (?, ?)"
+        );
+        return $stmt->execute([$this->name, $this->jeu]);
+    }
 
-            $console->write('Team Was add Successfully', 'green');
-        }
+    public function update(int $id): bool
+    {
+        $stmt = $this->pdo->prepare(
+            "UPDATE Equipe SET nom = ?, jeu = ? WHERE id = ?"
+        );
+        return $stmt->execute([$this->name, $this->jeu, $id]);
     }
-    public function updateTeam(){
 
-    }
-    public function deleteTeam(){
-        
-    }
-    public function ListTeam($id){
-                $sql = "SELECT * FROM Equipe WHERE id = $id";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute();
-        $result = $stmt->fetch();
-        echo "Team Name:" . $result['nom']."\n";
-        echo "Team jeu:" . $result['jeu']."\n";
-    }
 }
 ?>

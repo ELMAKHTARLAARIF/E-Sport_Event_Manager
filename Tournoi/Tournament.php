@@ -1,73 +1,68 @@
 <?php
-class Tournament
-{
-    private string $title;
-    private float $cashprize;
-    private string $format;
-    private $pdo;
+require_once './getConnection.php';
+require_once "Model.php";
 
-    public function __construct()
+class Tournament extends Model
+{
+    protected string $table = "Tournoi";
+
+    private string $title = '';
+    private float $cashprize = 0;
+    private string $format = '';
+
+    public function setTitle(string $title): void
     {
-        require_once 'getConnection.php';
+        if (!empty($title)) $this->title = $title;
     }
-    public function setTitle($title)
+
+    public function setCashprize(float $cashprize): void
     {
-        if (empty($title)) {
-            $this->title = $title;
-        }
+        if ($cashprize > 0) $this->cashprize = $cashprize;
     }
-    public function getTitle()
+
+    public function setFormat(string $format): void
+    {
+        if (!empty($format)) $this->format = $format;
+    }
+
+    public function getTitle(): string
     {
         return $this->title;
     }
 
-    public function setCashprize($cashprize)
-    {
-        if (empty($cashprize)) {
-            $this->cashprize = $cashprize;
-        }
-    }
-
-    public function getCachprize()
+    public function getCashprize(): float
     {
         return $this->cashprize;
     }
 
-    public function setFormat($format)
-    {
-        if (empty($format)) {
-            $this->format = $format;
-        }
-    }
-
-    public function getFormat()
+    public function getFormat(): string
     {
         return $this->format;
     }
 
-    public function createTournoi()
+    public function create(): bool
     {
-        $sql = "INSERT INTO Tournoi (title, cashprize,format) VALUES (?,?,?)";
+        $sql = "INSERT INTO Tournoi (titre, cashprize, format)
+                VALUES (:titre, :cashprize, :format)";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([$this->title, $this->cashprize, $this->format]);
-        if ($stmt) {
-            $console = new Console();
-            $console->write('Tournoi Was add Successfully', 'green');
-        }
+        return $stmt->execute([
+            ':titre' => $this->title,
+            ':cashprize' => $this->cashprize,
+            ':format' => $this->format
+        ]);
     }
 
-    public function updateTournoi() {}
-
-    public function deleteTournoi() {}
-
-    public function ListTournoi($id)
+    public function update(int $id): bool
     {
-        $sql = "SELECT * FROM Tournoi WHERE id = $id";
+        $sql = "UPDATE Tournoi
+                SET titre = ?, cashprize = ?, format = ?
+                WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute();
-        $result = $stmt->fetch();
-        echo "Sponsor Name:" . $result['title'] . "\n";
-        echo "Sponsor cashprize:" . $result['cashprize'] . "\n";
-        echo "Sponsor format:" . $result['format'] . "\n";
+        return $stmt->execute([
+            $this->title,
+            $this->cashprize,
+            $this->format,
+            $id
+        ]);
     }
 }

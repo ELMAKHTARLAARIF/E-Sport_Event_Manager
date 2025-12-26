@@ -1,71 +1,68 @@
 <?php
-require_once './database/Connection.php';
-
-class Club
+require_once './getConnection.php';
+require_once "Model.php";
+class Club extends Model
 {
+    protected string $table = 'Club';
     private string $name;
     private string $ville;
-    private $Date_creation;
-    private PDO $pdo;
+    private string $date_creation;
 
-    public function __construct()
-    {
-        require_once 'getConnection.php';
-    }
-
-    public function setName(string $name): void
+    public function setName(string $name)
     {
         if (!empty($name)) {
             $this->name = $name;
         }
     }
 
-    public function setVille(string $ville): void
+    public function setVille(string $ville)
     {
         if (!empty($ville)) {
             $this->ville = $ville;
         }
     }
-    public function setDate($date_creation): void
+
+    public function setDateCreation(string $date)
     {
-        if (!empty($Date_creation)) {
-            $this->Date_creation = $date_creation;
+        if (!empty($date)) {
+            $this->date_creation = $date;
         }
     }
-    public function getName(): string
+
+    public function getName()
     {
         return $this->name;
     }
 
-    public function getVille(): string
+    public function getVille()
     {
         return $this->ville;
     }
-    public function getDate(): string
-    {
-        return $this->Date_creation;
-    }
 
-    public function createClub(): void
+    public function getDateCreation()
     {
-        $sql = "INSERT INTO Club (nom, ville,date_creation) VALUES (?,?,?)";
+        return $this->date_creation;
+    }
+    public function create()
+    {
+        $sql = "INSERT INTO Club (nom, ville, date_creation)
+                VALUES (?, ?, ?)";
+
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([$this->name, $this->ville, $this->Date_creation]);
-        if ($stmt) {
-            $console = new Console();
 
-            $console->write('Club Was add Successfully', 'green');
-        }
+        return $stmt->execute([$this->name,$this->ville,$this->date_creation]);
     }
 
-    public function list_Club($id)
+
+    public function update(int $id)
     {
-        $sql = "SELECT * FROM Club WHERE id = $id";
+        $sql = "UPDATE Club
+                SET nom = :nom, ville = :ville, date_creation = :date_creation
+                WHERE id = :id";
+
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute();
-        $result = $stmt->fetch();
-        echo "Club Name:" . $result['nom']."\n";
-        echo "Club Ville:" . $result['ville']."\n";
-        echo "Date Creation:" . $result['date_creation']."\n";
+
+        return $stmt->execute([$this->name,$this->ville,$this->date_creation,$id]);
     }
+
 }

@@ -1,21 +1,28 @@
 <?php
-class Player
+require_once './getConnection.php';
+class Player extends Model
 {
-    private string $pseudo;
-    private string $ville;
-    private string $role;
-    private float $salaire;
-    private PDO $pdo;
+    protected string $table = "players";
+    private string $pseudo = '';
+    private string $role = '';
+    private float $salaire = 0;
 
-    public function __construct()
-    {
-        require_once 'getConnection.php';
-    }
-
-    public function setPseudo(string $pseudo): void
+    public function setPseudo(string $pseudo)
     {
         if (!empty($pseudo)) {
             $this->pseudo = $pseudo;
+        }
+    }
+    public function setRole(string $role)
+    {
+        if (!empty($role)) {
+            $this->role = $role;
+        }
+    }
+    public function setSalaire(float $salaire)
+    {
+        if ($salaire > 0) {
+            $this->salaire = $salaire;
         }
     }
     public function getPseudo()
@@ -23,61 +30,39 @@ class Player
         return $this->pseudo;
     }
 
-    public function setVille(string $ville): void
-    {
-        if (!empty($ville)) {
-            $this->ville = $ville;
-        }
-    }
-
-    public function getVille()
-    {
-        return $this->ville;
-    }
-    public function setRole(string $role): void
-    {
-        if (!empty($role)) {
-            $this->role = $role;
-        }
-    }
-
     public function getRole()
     {
         return $this->role;
-    }
-
-    public function setSalaire(string $salaire): void
-    {
-        if (!empty($salaire)) {
-            $this->salaire = $salaire;
-        }
     }
 
     public function getSalaire()
     {
         return $this->salaire;
     }
-    public function CreatePlayer()
+
+    public function Create()
     {
-        $sql = "INSERT INTO Joueur (pseudo, ville,role,salaire) VALUES (?,?,?,?)";
+        $sql = "INSERT INTO Joueur (pseudo, role, salaire) VALUES (?, ?, ?)";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([$this->pseudo, $this->ville,$this->role,$this->salaire]);
+        $stmt->execute([$this->pseudo, $this->role, $this->salaire]);
+
         if ($stmt) {
             $console = new Console();
             $console->write('Player Was add Successfully', 'green');
         }
     }
 
-    public function updatePlayer() {}
-    public function deletePlayer() {}
-
-    public function listPlayer($id) {
-                $sql = "SELECT * FROM Club WHERE id = $id";
+    public function update(int $id)
+    {
+        $sql = "UPDATE Joueur SET pseudo = ?, role = ?, salaire = ? WHERE id = ?";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute();
-        $result = $stmt->fetch();
-        echo "Player Pseudo:" . $result['pseudo']."\n";
-        echo "Player City:" . $result['ville']."\n";
-        echo "Player Role:" . $result['role']."\n";
+        $stmt->execute([$this->pseudo, $this->role, $this->salaire, $id]);
     }
+    public function delete(int $id)
+    {
+        $stmt = $this->pdo->prepare("DELETE FROM Joueur WHERE id = ?");
+        $stmt->execute([$id]);
+    }
+
+
 }
