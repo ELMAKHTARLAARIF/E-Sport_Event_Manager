@@ -3,7 +3,7 @@ require_once './getConnection.php';
 require_once "Model.php";
 class MatchEvent extends Model
 {
-    protected string $table = "Tournoi";
+    protected string $table = "MatchEvent";
     private int $score_teamA = 0;
     private int $score_teamB = 0;
 
@@ -69,4 +69,21 @@ class MatchEvent extends Model
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$this->score_teamA, $this->score_teamB, $id]);
     }
+
+    public function statsByTournament() {
+    $sql = "
+        SELECT 
+            Tournoi.titre AS tournoi,
+            Equipe.nom AS equipe,
+            COUNT(MatchEvent.id) AS total_matchs
+        FROM Tournoi
+        JOIN MatchEvent ON MatchEvent.tournoi_id = Tournoi.id
+        JOIN Equipe ON Equipe.id = MatchEvent.equipeA_id
+        GROUP BY Tournoi.titre, Equipe.nom
+    ";
+
+    $stmt = $this->pdo->query($sql);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 }

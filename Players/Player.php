@@ -1,8 +1,9 @@
 <?php
 require_once './getConnection.php';
+require_once "Model.php";
 class Player extends Model
 {
-    protected string $table = "players";
+    protected string $table = "Joueur";
     private string $pseudo = '';
     private string $role = '';
     private float $salaire = 0;
